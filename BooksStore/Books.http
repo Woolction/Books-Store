@@ -4,4 +4,23 @@ GET http://localhost:5124/books
 GET http://localhost:5124/books/1
 
 ###
-GET http://localhost:5124/books/9
+GET http://localhost:5124/books/3
+
+### 
+POST http://localhost:5124/books
+Content-Type: application/json
+
+{
+    "name": "Books of the war"    
+}
+
+###
+PUT http://localhost:5124/books/0
+Content-Type: application/json
+
+{
+    "name": "New Name for the Book"
+}
+
+###
+DELETE http://localhost:5124/books/0 
