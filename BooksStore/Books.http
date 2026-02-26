@@ -11,7 +11,8 @@ POST http://localhost:5124/books
 Content-Type: application/json
 
 {
-    "name": "Books of the war"    
+    "name": "pop",
+    "genre": "History"
 }
 
 ###
@@ -19,7 +20,8 @@ PUT http://localhost:5124/books/0
 Content-Type: application/json
 
 {
-    "name": "New Name for the Book"
+    "name": "New Name for the Book",
+    "genre": "HH"
 }
 
 ###

@@ -15,7 +15,7 @@ public class PostPoint : IPoint
         // CREATE book
         app.MapPost("/books", (BookCreateDto newBook) =>
         {
-            BookDto book = new(books.Count + 1, newBook.Name);
+            BookDto book = new(books.Count + 1, newBook.Name, newBook.Genre);
 
             books.Add(book);
 

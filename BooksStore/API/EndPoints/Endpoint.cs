@@ -11,11 +11,7 @@ public static class EndPoint
     private static readonly IPoint deletePoint = new DeletePoint();
     private static readonly IPoint putPoint = new PutPoint();
 
-    private static readonly List<BookDto> books =
-    [
-        new BookDto(0, "History the Zynres"),
-        new BookDto(1, "Created in Abyss"),
-    ];
+    private static readonly List<BookDto> books = [];
 
     public static void MapAll(this WebApplication app) 
     {

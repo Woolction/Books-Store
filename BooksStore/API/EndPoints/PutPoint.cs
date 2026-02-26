@@ -14,7 +14,7 @@ public class PutPoint : IPoint
                 return Results.NotFound();
             }
 
-            books[id] = new(id, updatedDto.Name);
+            books[id] = new(id, updatedDto.Name, updatedDto.Genre);
 
             return Results.NoContent();
         });
