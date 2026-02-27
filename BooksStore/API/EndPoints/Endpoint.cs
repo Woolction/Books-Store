@@ -11,13 +11,11 @@ public static class EndPoint
     private static readonly IPoint deletePoint = new DeletePoint();
     private static readonly IPoint putPoint = new PutPoint();
 
-    private static readonly List<BookDto> books = [];
-
     public static void MapAll(this WebApplication app) 
     {
-        getPoint.Point(app, books);
-        putPoint.Point(app, books);
-        postPoint.Point(app, books);
-        deletePoint.Point(app, books);
+        getPoint.Point(app);
+        putPoint.Point(app);
+        postPoint.Point(app);
+        deletePoint.Point(app);
     }
 }

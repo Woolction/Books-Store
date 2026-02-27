@@ -2,7 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BooksStore.API.Dtos;
 
-public record class BookCreateDto(
+public record class BookSummaryDto(
+    int Id,
     [Required][StringLength(50)] string Name,
-    [Required][StringLength(15)] string Genre
+    [Required] string GenreName
 );

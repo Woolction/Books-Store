@@ -1,20 +1,26 @@
+using BooksStore.API.Data;
 using BooksStore.API.Dtos;
+using BooksStore.API.Models;
 
 namespace BooksStore.API.EndPoints;
 
 public class PutPoint : IPoint
 {
-    public void Point(WebApplication app, List<BookDto> books)
+    public void Point(WebApplication app)
     {
         //UPDATE book
-        app.MapPut("/books/{id}", (int id, BookUpdateDto updatedDto) =>
+        app.MapPut("/books/{id}", async (int id, BookUpdateDto updatedDto, BookStoreContext context) =>
         {
-            if (id < 0)
-            {
-                return Results.NotFound();
-            }
+            Book? book = await context.Books.FindAsync(id);
 
-            books[id] = new(id, updatedDto.Name, updatedDto.Genre);
+            if (book == null)
+                return Results.NotFound();
+
+            book.Id = id;
+            book.Name = updatedDto.Name;
+            book.GenreId = updatedDto.GenreId;
+
+            await context.SaveChangesAsync();
 
             return Results.NoContent();
         });

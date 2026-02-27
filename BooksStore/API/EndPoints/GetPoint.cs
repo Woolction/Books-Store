@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using BooksStore.API.Models;
+using BooksStore.API.Data;
 using BooksStore.API.Dtos;
 
 namespace BooksStore.API.EndPoints;
@@ -10,17 +13,41 @@ public class GetPoint : IPoint
         this.getBook = getBook;
     }
 
-    public void Point(WebApplication app, List<BookDto> books)
+    public void Point(WebApplication app)
     {
         // GET all books
-        app.MapGet("/books", () => books);
+        app.MapGet("/books",
+            async (BookStoreContext context) => await context.Books
+            .Include(book => book.Genre)
+            .Select(book => new BookSummaryDto(
+                    book.Id, book.Name,
+                    book.Genre!.Name))
+            .AsNoTracking()
+            .ToListAsync());
+
+        // GET all books
+        app.MapGet("/genres",
+            async (BookStoreContext context) => await context.Genres
+            .Select(genre => new GenreDto(genre.Id, genre.Name))
+            .AsNoTracking().ToListAsync());
 
         // GET book by index
-        app.MapGet("/books/{id}", (int id) =>
+        app.MapGet("/books/{id}", async (int id, BookStoreContext context) =>
         {
-            BookDto? book = books.Find(books => books.Id == id);
+            Book? book = await context.Books.FindAsync(id);
 
-            return book is null ? Results.NotFound() : Results.Ok(book);
+            if (book != null)
+            {
+                BookDetailsDto BookDetailsDto = new(
+                    book.Id,
+                    book.Name,
+                    book.GenreId
+                );
+
+                return Results.Ok(BookDetailsDto);
+            }
+
+            return Results.NotFound();
 
         }).WithName(getBook);
     }

@@ -1,3 +1,5 @@
+using BooksStore.API.Models;
+using BooksStore.API.Data;
 using BooksStore.API.Dtos;
 
 namespace BooksStore.API.EndPoints;
@@ -9,17 +11,33 @@ public class PostPoint : IPoint
     {
         this.getBook = getBook;
     }
-    
-    public void Point(WebApplication app, List<BookDto> books)
+
+    public void Point(WebApplication app)
     {
         // CREATE book
-        app.MapPost("/books", (BookCreateDto newBook) =>
+        app.MapPost("/books", async (BookDetailsDto newBook, BookStoreContext context) =>
         {
-            BookDto book = new(books.Count + 1, newBook.Name, newBook.Genre);
+            if (await context.Genres.FindAsync(newBook.GenreId) == null)
+            {
+                return Results.NotFound();
+            }
 
-            books.Add(book);
+            Book book = new()
+            {
+                Name = newBook.Name,
+                GenreId = newBook.GenreId
+            };
 
-            return Results.CreatedAtRoute(getBook, new { id = book.Id }, book);
+            context.Add(book);
+            await context.SaveChangesAsync();
+
+            BookDetailsDto createDto = new(
+                book.Id,
+                book.Name,
+                book.GenreId
+                );
+
+            return Results.CreatedAtRoute(getBook, new { id = createDto.Id }, createDto);
         });
 
     }
