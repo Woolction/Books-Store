@@ -43,7 +43,9 @@ public class BooksController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostBook(BookDetailsDto newBook)
     {
-        if (await context.Genres.FindAsync(newBook.GenreId) == null)
+        Genre? genre = await context.Genres.FindAsync(newBook.GenreId);
+        
+        if (genre == null)
         {
             return NotFound();
         }
@@ -58,16 +60,9 @@ public class BooksController : ControllerBase
 
         await context.SaveChangesAsync();
 
-        var bookDto = new BookSummaryDto(book.Id, book.Name, book.Genre!.Name);
+        var bookDto = new BookSummaryDto(book.Id, book.Name, genre.Name);
 
-        string? actionName = Url.RouteUrl("GetBookById");
-
-        if (actionName == null)
-        {
-            return NoContent();
-        }
-
-        return CreatedAtAction(actionName, new { id = bookDto.Id }, bookDto);
+        return CreatedAtAction("GetBookById", new { id = bookDto.Id }, bookDto);
     }
 
     [HttpPut("{id}")]
@@ -90,7 +85,7 @@ public class BooksController : ControllerBase
     public async Task<IActionResult> DeleteBookById(int id)
     {
         await context.Books.Where(book => book.Id == id).ExecuteDeleteAsync();
-        
+
         return NoContent();
     }
 }
