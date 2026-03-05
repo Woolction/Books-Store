@@ -34,10 +34,9 @@ public class BooksController : ControllerBase
     [HttpGet("{id}", Name = "GetBookById")]
     public async Task<IActionResult> GetBookById(int id)
     {
-        var books = await context.Books.Where(book => book.Id == id)
-                                       .AsNoTracking().ToListAsync();
+        var books = await context.Books.FindAsync(id);
     
-        return books.Count > 0 ? Ok(books) : NoContent();
+        return books is not null ? Ok(books) : NotFound();
     }
 
     [HttpPost]

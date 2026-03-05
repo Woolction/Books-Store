@@ -1,19 +1,22 @@
 GET http://localhost:5124/books
 
 ###
-GET http://localhost:5124/api/books/1
+GET http://localhost:5124
+
+###
+GET http://localhost:5124/books/4
 
 ### 
 POST http://localhost:5124/api/books
 Content-Type: application/json
 
 {
-    "name": "pop",
-    "genreId": 2
+    "name": "English",
+    "genreId": 4
 }
 
 ###
-PUT http://localhost:5124/books/1
+PUT http://localhost:5124/books/5
 Content-Type: application/json
 
 {

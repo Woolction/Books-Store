@@ -47,7 +47,7 @@ public class GetPoint : IPoint
                 return Results.Ok(BookDetailsDto);
             }
 
-            return Results.NoContent();
+            return Results.NotFound();
 
         }).WithName(getBook);
     }

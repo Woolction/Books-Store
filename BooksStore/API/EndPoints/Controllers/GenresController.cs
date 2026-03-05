@@ -24,7 +24,7 @@ public class GenresController : ControllerBase
                               .AsNoTracking()
                               .ToListAsync();
 
-        return genres.Count > 0 ? Ok(genres) : NoContent();
+        return genres.Count > 0 ? Ok(genres) : NotFound();
     }
     
     [HttpGet("{id}")]
@@ -33,7 +33,7 @@ public class GenresController : ControllerBase
         var genre = await context.Genres.FindAsync(id);
 
         if (genre == null)
-            return NoContent();
+            return NotFound();
 
         return Ok(genre);
     }
